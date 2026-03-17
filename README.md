@@ -1,16 +1,36 @@
-# React + Vite
+# Pokémon Team Builder
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A premium, analytical tool for building Pokémon teams using PokéAPI.
 
-Currently, two official plugins are available:
+## 🌟 Features
+- **Stat Visualization**: Radar charts for base stat distributions.
+- **Smart Analysis**: Automatic role classification and type coverage reporting.
+- **Modern UI**: Dark-mode glassmorphism theme with smooth animations.
+- **Persistence**: Auto-saves your team to LocalStorage.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## 🛠️ Setup Instructions
 
-## React Compiler
+1. **Install Dependencies**:
+   ```bash
+   npm install
+   ```
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+2. **Run Locally**:
+   ```bash
+   npm run dev
+   ```
 
-## Expanding the ESLint configuration
+3. **Open App**:
+   Navigate to [http://localhost:5173/](http://localhost:5173/) in your browser.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 🏗️ Architecture
+- **`src/hooks/`**: Custom hooks for data fetching (`usePokemon`) and state management (`useTeam`).
+- **`src/utils/`**: Logic for type effectiveness (`typeMatrix`) and role classification (`roleClassifier`).
+- **`src/components/`**: Modular React components for a clean, maintainable UI.
+
+## 📝 Assumptions
+- Animated sprites are available for Pokémon from Gen I to Gen V.
+- Fallback to official artwork is used for Gen VI+.
+- Simple heuristics are used for role classification.
+
+*Built with React, Vite, Tailwind CSS v4, and Recharts.*

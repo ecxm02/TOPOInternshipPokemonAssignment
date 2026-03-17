@@ -1,121 +1,63 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import React from 'react';
+import { useTeam } from './hooks/useTeam';
+import SearchBar from './components/SearchBar';
+import TeamGrid from './components/TeamGrid';
+import TypeCoverageChart from './components/TypeCoverageChart';
+import RecommendationPanel from './components/RecommendationPanel';
 
-function App() {
-  const [count, setCount] = useState(0)
+const App = () => {
+  const { team, addPokemon, removePokemon } = useTeam();
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+    <div className="min-h-screen bg-slate-950 text-slate-200 font-inter selection:bg-brand-500/30">
+      {/* Header */}
+      <header className="py-12 px-4 text-center">
+        <h1 className="logo text-3xl md:text-5xl mb-4 tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-brand-400 to-brand-600 drop-shadow-sm">
+          POKÉMON TEAM BUILDER
+        </h1>
+        <p className="text-white/40 uppercase tracking-[0.3em] text-[10px] md:text-xs font-bold">
+          Analyze • Optimize • Dominate
+        </p>
+      </header>
 
-      <div className="ticks"></div>
+      <main className="container mx-auto pb-20">
+        {/* Search Section */}
+        <section className="mb-8">
+          <SearchBar onAdd={addPokemon} teamSize={team.length} />
+        </section>
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+        {/* Team Grid Section */}
+        <section className="mb-16">
+          <div className="px-4 mb-4 flex justify-between items-end">
+            <h2 className="text-sm font-bold uppercase tracking-widest text-white/60">Your Active Party</h2>
+            <span className="text-[10px] font-mono text-white/20">{team.length} / 6</span>
+          </div>
+          <TeamGrid team={team} onRemove={removePokemon} />
+        </section>
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
-}
+        {/* Analysis Section */}
+        {team.length > 0 && (
+          <div className="animate-in fade-in slide-in-from-bottom-8 duration-700 px-4">
+            <div className="grid grid-cols-1 lg:grid-cols-1 gap-8">
+              <TypeCoverageChart team={team} />
+              <RecommendationPanel team={team} />
+            </div>
+          </div>
+        )}
 
-export default App
+        {team.length === 0 && (
+          <div className="text-center py-20 opacity-20">
+            <p className="italic">Your team is empty. Use the search bar above to join the battle.</p>
+          </div>
+        )}
+      </main>
+
+      {/* Footer */}
+      <footer className="py-8 text-center border-t border-white/5 opacity-30 text-[10px] uppercase tracking-widest">
+        Powered by PokéAPI • Built with React & Tailwind CSS
+      </footer>
+    </div>
+  );
+};
+
+export default App;
