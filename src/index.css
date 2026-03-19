@@ -22,7 +22,7 @@
   :root {
     --text: #e2e8f0;
     --text-h: #f8fafc;
-    --bg: #0f172a;
+    --bg: #020617;
   }
 
   body {
@@ -46,5 +46,36 @@
 @layer utilities {
   .glass-card {
     @apply bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl shadow-xl;
+  }
+  
+  .pixelated {
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+  }
+
+  .animate-slide-left {
+    animation: slide-left linear infinite;
+  }
+
+  .animate-slide-right {
+    animation: slide-right linear infinite;
+  }
+
+  @keyframes slide-left {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  @keyframes slide-right {
+    from {
+      transform: translateX(-50%);
+    }
+    to {
+      transform: translateX(0);
+    }
   }
 }

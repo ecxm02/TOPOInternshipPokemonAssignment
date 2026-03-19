@@ -1,7 +1,7 @@
 import React from 'react';
 import PokemonCard from './PokemonCard';
 
-const TeamSlot = ({ pokemon, index, onRemove }) => {
+const TeamSlot = ({ pokemon, index, onRemove, chartType }) => {
   return (
     <div className="w-full h-full min-h-[400px]">
       {pokemon ? (
@@ -9,6 +9,7 @@ const TeamSlot = ({ pokemon, index, onRemove }) => {
           pokemon={pokemon} 
           index={index} 
           onRemove={onRemove} 
+          chartType={chartType}
         />
       ) : (
         <div className="glass-card h-full flex flex-col items-center justify-center p-8 border-dashed border-2 border-white/10 hover:border-white/30 transition-colors group cursor-default">

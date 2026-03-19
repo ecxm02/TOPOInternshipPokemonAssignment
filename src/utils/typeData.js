@@ -1,0 +1,20 @@
+export const TYPE_DATA = {
+  normal: { double: ['fighting'], half: [], no: ['ghost'] },
+  fire: { double: ['water', 'ground', 'rock'], half: ['fire', 'grass', 'ice', 'bug', 'steel', 'fairy'], no: [] },
+  water: { double: ['grass', 'electric'], half: ['fire', 'water', 'ice', 'steel'], no: [] },
+  grass: { double: ['fire', 'ice', 'poison', 'flying', 'bug'], half: ['water', 'grass', 'electric', 'ground'], no: [] },
+  electric: { double: ['ground'], half: ['electric', 'flying', 'steel'], no: [] },
+  ice: { double: ['fire', 'fighting', 'rock', 'steel'], half: ['ice'], no: [] },
+  fighting: { double: ['flying', 'psychic', 'fairy'], half: ['bug', 'rock', 'dark'], no: [] },
+  poison: { double: ['ground', 'psychic'], half: ['grass', 'fighting', 'poison', 'bug', 'fairy'], no: [] },
+  ground: { double: ['water', 'grass', 'ice'], half: ['poison', 'rock'], no: ['electric'] },
+  flying: { double: ['electric', 'ice', 'rock'], half: ['grass', 'fighting', 'bug'], no: ['ground'] },
+  psychic: { double: ['bug', 'ghost', 'dark'], half: ['fighting', 'psychic'], no: [] },
+  bug: { double: ['fire', 'flying', 'rock'], half: ['grass', 'fighting', 'ground'], no: [] },
+  rock: { double: ['normal', 'fire', 'poison', 'flying'], half: ['water', 'grass', 'fighting', 'ground', 'steel'], no: [] },
+  ghost: { double: ['ghost', 'dark'], half: ['poison', 'bug'], no: ['normal', 'fighting'] },
+  dragon: { double: ['ice', 'dragon', 'fairy'], half: ['fire', 'water', 'grass', 'electric'], no: [] },
+  dark: { double: ['fighting', 'bug', 'fairy'], half: ['ghost', 'dark'], no: ['psychic'] },
+  steel: { double: ['fire', 'fighting', 'ground'], half: ['normal', 'grass', 'ice', 'flying', 'psychic', 'bug', 'rock', 'dragon', 'steel', 'fairy'], no: ['poison'] },
+  fairy: { double: ['poison', 'steel'], half: ['fighting', 'bug', 'dark'], no: ['dragon'] }
+};
