@@ -6,6 +6,12 @@ Technical assessment project for Topo EH-AI Consulting (Software Developer Inter
 
 This application allows users to build a team of up to 6 Pokemon using PokéAPI and evaluate team quality through type, stat, and role analysis.
 
+## Live Demo
+
+**For convenience, the final product is hosted on the web, so you do not need to build it locally:**
+
+https://topo-internship-pokemon-assignment-813qur93e-ecxm02s-projects.vercel.app/
+
 Key goals:
 - Integrate external API data into a responsive UI
 - Analyze team composition with clear, explainable heuristics
