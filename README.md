@@ -12,7 +12,7 @@ This application is optimized for desktop landscape use.
 
 **For convenience, the final product is hosted on the web, so you do not need to build it locally:**
 
-https://topo-internship-pokemon-assignment-ndioi447d-ecxm02s-projects.vercel.app/
+https://topo-internship-pokemon-assignment-kzn9hae8t-ecxm02s-projects.vercel.app/
 
 Key goals:
 - Integrate external API data into a responsive UI
