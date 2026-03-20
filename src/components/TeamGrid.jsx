@@ -1,7 +1,7 @@
 import React from 'react';
 import TeamSlot from './TeamSlot';
 
-const TeamGrid = ({ team, onRemove, onExpand }) => {
+const TeamGrid = ({ team, onRemove, onExpand, onRequestAdd }) => {
   // Ensure we always show 6 slots
   const slots = Array(6).fill(null);
   team.forEach((p, i) => {
@@ -17,6 +17,7 @@ const TeamGrid = ({ team, onRemove, onExpand }) => {
           pokemon={pokemon} 
           onRemove={onRemove} 
           onExpand={onExpand}
+          onRequestAdd={onRequestAdd}
         />
       ))}
     </div>

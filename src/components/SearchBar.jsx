@@ -3,7 +3,7 @@ import { usePokemon } from '../hooks/usePokemon';
 import { usePokemonIndex } from '../hooks/usePokemonIndex';
 import { rankPokemonMatches } from '../utils/fuzzySearch';
 
-const SearchBar = ({ onAdd, teamSize }) => {
+const SearchBar = ({ onAdd, teamSize, focusSignal = 0 }) => {
   const [query, setQuery] = useState('');
   const [debouncedQuery, setDebouncedQuery] = useState('');
   const [isFocused, setIsFocused] = useState(false);
@@ -11,6 +11,7 @@ const SearchBar = ({ onAdd, teamSize }) => {
   const { loading: pokemonLoading, error: pokemonError, fetchPokemon } = usePokemon();
   const { pokemonIndex, loading: indexLoading, error: indexError } = usePokemonIndex();
   const containerRef = useRef(null);
+  const inputRef = useRef(null);
 
   // Debounce logic
   useEffect(() => {
@@ -40,6 +41,14 @@ const SearchBar = ({ onAdd, teamSize }) => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  useEffect(() => {
+    if (!focusSignal) return;
+
+    containerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    inputRef.current?.focus();
+    setIsFocused(true);
+  }, [focusSignal]);
+
   const handleSelect = async (nameOrId) => {
     if (teamSize >= 6) return;
 
@@ -59,6 +68,7 @@ const SearchBar = ({ onAdd, teamSize }) => {
     <div ref={containerRef} className="relative w-full max-w-md mx-auto mb-12 px-4">
       <div className="relative group">
         <input
+          ref={inputRef}
           type="text"
           value={query}
           onChange={(e) => setQuery(e.target.value)}

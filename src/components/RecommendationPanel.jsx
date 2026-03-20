@@ -55,36 +55,30 @@ const RecommendationPanel = ({ team }) => {
   }, [team]);
 
   return (
-    <div className="glass-card p-6 w-full max-w-5xl mx-auto mb-12">
-      <h2 className="text-xl font-bold mb-6 text-left border-l-4 border-brand-500 pl-4 uppercase tracking-tighter">
-        Pro Tips & Recommendations
-      </h2>
-      
-      <div className="space-y-4">
-        {tips.map((tip, i) => (
-          <div 
-            key={i} 
-            className={`p-4 rounded-xl border-l-4 flex items-start gap-4 animate-in fade-in slide-in-from-left duration-300`}
-            style={{ 
-              backgroundColor: tip.includes('CRITICAL') ? '#ef444410' : tip.includes('WARNING') ? '#f9731610' : '#3b82f610',
-              borderColor: tip.includes('CRITICAL') ? '#ef4444' : tip.includes('WARNING') ? '#f97316' : '#3b82f6'
-            }}
-          >
-            <div className="mt-1">
-              {tip.includes('CRITICAL') ? (
-                <svg className="w-5 h-5 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                </svg>
-              ) : (
-                <svg className="w-5 h-5 text-brand-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              )}
-            </div>
-            <p className="text-sm font-medium leading-relaxed opacity-90">{tip}</p>
+    <div className="space-y-4">
+      {tips.map((tip, i) => (
+        <div
+          key={i}
+          className={`p-4 rounded-xl border-l-4 flex items-start gap-4 animate-in fade-in slide-in-from-left duration-300`}
+          style={{
+            backgroundColor: tip.includes('CRITICAL') ? '#ef444410' : tip.includes('WARNING') ? '#f9731610' : '#3b82f610',
+            borderColor: tip.includes('CRITICAL') ? '#ef4444' : tip.includes('WARNING') ? '#f97316' : '#3b82f6'
+          }}
+        >
+          <div className="mt-1">
+            {tip.includes('CRITICAL') ? (
+              <svg className="w-5 h-5 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+              </svg>
+            ) : (
+              <svg className="w-5 h-5 text-brand-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            )}
           </div>
-        ))}
-      </div>
+          <p className="text-sm font-medium leading-relaxed opacity-90">{tip}</p>
+        </div>
+      ))}
     </div>
   );
 };

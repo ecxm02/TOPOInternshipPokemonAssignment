@@ -3,6 +3,7 @@ import TypeBadge from './TypeBadge';
 import StatRadarChart from './StatRadarChart';
 import { typeColors } from '../utils/typeColors';
 import { getPokemonEffectiveness } from '../utils/typeAnalysis';
+import { classifyRole } from '../utils/roleClassifier';
 
 const MiniBadge = ({ type, multiplier }) => {
   const color = typeColors[type] || '#3b82f6';
@@ -46,6 +47,14 @@ const PokemonCardModal = ({ pokemon, onClose }) => {
   const officialPhoto = pokemon.sprites.other?.['official-artwork']?.front_default || pokemon.sprites.front_default;
   const { advantages, disadvantages, weaknesses, resistances } = getPokemonEffectiveness(typeNames);
   const total = pokemon.stats.reduce((acc, s) => acc + s.base_stat, 0);
+  const roleLabel = classifyRole(pokemon.stats);
+  const roleTone = roleLabel.includes('Sweeper')
+    ? { bg: '#ef444433', border: '#ef444488', text: '#fecaca' }
+    : roleLabel.includes('Tank')
+      ? { bg: '#3b82f633', border: '#3b82f688', text: '#bfdbfe' }
+      : roleLabel.includes('Mixed')
+        ? { bg: '#f59e0b33', border: '#f59e0b88', text: '#fde68a' }
+        : { bg: '#10b98133', border: '#10b98188', text: '#a7f3d0' };
 
   const statRows = [
     { name: 'HP', val: pokemon.stats[0].base_stat },
@@ -69,6 +78,16 @@ const PokemonCardModal = ({ pokemon, onClose }) => {
           <div className="flex items-center justify-between border-b border-white/10 pb-3">
             <div className="flex items-center gap-2 min-w-0">
               <h3 className="capitalize text-xl md:text-2xl font-black tracking-tight truncate">{pokemon.name}</h3>
+              <span
+                className="px-2 py-1 rounded-md text-[10px] md:text-[11px] font-black uppercase tracking-wide whitespace-nowrap"
+                style={{
+                  backgroundColor: roleTone.bg,
+                  border: `1px solid ${roleTone.border}`,
+                  color: roleTone.text
+                }}
+              >
+                {roleLabel}
+              </span>
               <img src={animatedSprite} alt="sprite" className="w-8 h-8 object-contain pixelated shrink-0" />
             </div>
 

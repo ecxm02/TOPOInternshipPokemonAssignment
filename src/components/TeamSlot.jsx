@@ -1,7 +1,7 @@
 import React from 'react';
 import PokemonCard from './PokemonCard';
 
-const TeamSlot = ({ pokemon, index, onRemove, onExpand }) => {
+const TeamSlot = ({ pokemon, index, onRemove, onExpand, onRequestAdd }) => {
   return (
     <div className="w-full h-full min-h-[400px] relative overflow-visible">
       {pokemon ? (
@@ -12,7 +12,11 @@ const TeamSlot = ({ pokemon, index, onRemove, onExpand }) => {
           onExpand={onExpand}
         />
       ) : (
-        <div className="glass-card h-full flex flex-col items-center justify-center p-8 border-dashed border-2 border-white/10 hover:border-white/30 transition-colors group cursor-default">
+        <button
+          type="button"
+          onClick={onRequestAdd}
+          className="glass-card h-full w-full flex flex-col items-center justify-center p-8 border-dashed border-2 border-white/10 hover:border-white/30 transition-colors group cursor-pointer"
+        >
           <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
             <svg 
               xmlns="http://www.w3.org/2000/svg" 
@@ -29,7 +33,7 @@ const TeamSlot = ({ pokemon, index, onRemove, onExpand }) => {
           <span className="text-white/20 font-bold uppercase tracking-widest text-xs group-hover:text-white/40 transition-colors">
             Slot {index + 1}
           </span>
-        </div>
+        </button>
       )}
     </div>
   );

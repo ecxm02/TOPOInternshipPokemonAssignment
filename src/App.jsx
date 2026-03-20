@@ -3,6 +3,9 @@ import { useTeam } from './hooks/useTeam';
 import SearchBar from './components/SearchBar';
 import TeamGrid from './components/TeamGrid';
 import TypeCoverageChart from './components/TypeCoverageChart';
+import TeamTypeOverall from './components/TeamTypeOverall';
+import TeamStatChart from './components/TeamStatChart';
+import TeamRoleColumns from './components/TeamRoleColumns';
 import RecommendationPanel from './components/RecommendationPanel';
 import StaticBackground from './components/AnimatedBackground';
 import PokemonCardModal from './components/PokemonCardModal';
@@ -10,10 +13,16 @@ import PokemonCardModal from './components/PokemonCardModal';
 const App = () => {
   const { team, addPokemon, removePokemon } = useTeam();
   const [activePage, setActivePage] = useState('team');
+  const [typeAnalysisView, setTypeAnalysisView] = useState('overall');
   const [expandedPokemon, setExpandedPokemon] = useState(null);
+  const [searchFocusSignal, setSearchFocusSignal] = useState(0);
 
   const openExpandedPokemon = (pokemon) => setExpandedPokemon(pokemon);
   const closeExpandedPokemon = () => setExpandedPokemon(null);
+  const focusSearchBar = () => {
+    setActivePage('team');
+    setSearchFocusSignal((prev) => prev + 1);
+  };
 
   return (
     <div className="min-h-screen text-slate-200 font-inter selection:bg-brand-500/30 relative">
@@ -37,10 +46,22 @@ const App = () => {
                 Team
               </button>
               <button
-                onClick={() => setActivePage('analysis')}
-                className={`px-4 py-2 rounded-md text-[11px] font-bold tracking-widest uppercase transition-all cursor-pointer ${activePage === 'analysis' ? 'bg-brand-500 text-white shadow-lg shadow-brand-500/20' : 'text-white/40 hover:text-white/60 hover:bg-white/5'}`}
+                onClick={() => setActivePage('type-analysis')}
+                className={`px-4 py-2 rounded-md text-[11px] font-bold tracking-widest uppercase transition-all cursor-pointer ${activePage === 'type-analysis' ? 'bg-brand-500 text-white shadow-lg shadow-brand-500/20' : 'text-white/40 hover:text-white/60 hover:bg-white/5'}`}
               >
-                Analysis
+                Type Analysis
+              </button>
+              <button
+                onClick={() => setActivePage('stat-analysis')}
+                className={`px-4 py-2 rounded-md text-[11px] font-bold tracking-widest uppercase transition-all cursor-pointer ${activePage === 'stat-analysis' ? 'bg-brand-500 text-white shadow-lg shadow-brand-500/20' : 'text-white/40 hover:text-white/60 hover:bg-white/5'}`}
+              >
+                Stat Analysis
+              </button>
+              <button
+                onClick={() => setActivePage('recommendations')}
+                className={`px-4 py-2 rounded-md text-[11px] font-bold tracking-widest uppercase transition-all cursor-pointer ${activePage === 'recommendations' ? 'bg-brand-500 text-white shadow-lg shadow-brand-500/20' : 'text-white/40 hover:text-white/60 hover:bg-white/5'}`}
+              >
+                Recommendations
               </button>
             </div>
             <span className="text-[10px] font-mono text-white/20">{team.length} / 6</span>
@@ -50,7 +71,7 @@ const App = () => {
             <>
               {/* Search Section */}
               <section className="mb-8">
-                <SearchBar onAdd={addPokemon} teamSize={team.length} />
+                <SearchBar onAdd={addPokemon} teamSize={team.length} focusSignal={searchFocusSignal} />
               </section>
 
               {/* Team Grid Section */}
@@ -62,33 +83,92 @@ const App = () => {
                   team={team}
                   onRemove={removePokemon}
                   onExpand={openExpandedPokemon}
+                  onRequestAdd={focusSearchBar}
                 />
               </section>
             </>
           )}
 
-          {activePage === 'analysis' && (
+          {activePage === 'type-analysis' && (
             <>
               {team.length > 0 ? (
                 <div className="animate-in fade-in slide-in-from-bottom-8 duration-700 px-4">
-                  <div className="grid grid-cols-1 lg:grid-cols-1 gap-8">
-                    <TypeCoverageChart team={team} />
+                  <div className="glass-card p-6 mb-8">
+                    <h2 className="text-xl font-bold mb-6 text-left border-l-4 border-brand-500 pl-4 uppercase tracking-tighter">
+                      Type Analysis
+                    </h2>
+
+                    <div className="mb-6 flex justify-center">
+                      <div className="flex bg-white/5 p-1 rounded-lg border border-white/10 gap-1 w-fit">
+                        <button
+                          onClick={() => setTypeAnalysisView('overall')}
+                          className={`px-4 py-2 rounded-md text-[10px] font-bold tracking-widest uppercase transition-all cursor-pointer ${typeAnalysisView === 'overall' ? 'bg-brand-500 text-white shadow-lg shadow-brand-500/20' : 'text-white/40 hover:text-white/60 hover:bg-white/5'}`}
+                        >
+                          Overall
+                        </button>
+                        <button
+                          onClick={() => setTypeAnalysisView('breakdown')}
+                          className={`px-4 py-2 rounded-md text-[10px] font-bold tracking-widest uppercase transition-all cursor-pointer ${typeAnalysisView === 'breakdown' ? 'bg-brand-500 text-white shadow-lg shadow-brand-500/20' : 'text-white/40 hover:text-white/60 hover:bg-white/5'}`}
+                        >
+                          Breakdown
+                        </button>
+                      </div>
+                    </div>
+
+                    {typeAnalysisView === 'overall' ? (
+                      <TeamTypeOverall team={team} />
+                    ) : (
+                      <TypeCoverageChart team={team} />
+                    )}
+                  </div>
+                </div>
+              ) : (
+                <div className="text-center py-20 opacity-20 px-4">
+                  <p className="italic">Build your team first, then open Type Analysis to review matchup coverage.</p>
+                </div>
+              )}
+            </>
+          )}
+
+          {activePage === 'stat-analysis' && (
+            <>
+              {team.length > 0 ? (
+                <div className="animate-in fade-in slide-in-from-bottom-8 duration-700 px-4">
+                  <div className="glass-card p-6">
+                    <h2 className="text-xl font-bold mb-6 text-left border-l-4 border-brand-500 pl-4 uppercase tracking-tighter">
+                      Stat Analysis
+                    </h2>
+                    <TeamStatChart team={team} />
+                    <TeamRoleColumns team={team} />
+                  </div>
+                </div>
+              ) : (
+                <div className="text-center py-20 opacity-20 px-4">
+                  <p className="italic">Build your team first, then open Stat Analysis to review recommendations.</p>
+                </div>
+              )}
+            </>
+          )}
+
+          {activePage === 'recommendations' && (
+            <>
+              {team.length > 0 ? (
+                <div className="animate-in fade-in slide-in-from-bottom-8 duration-700 px-4">
+                  <div className="glass-card p-6">
+                    <h2 className="text-xl font-bold mb-6 text-left border-l-4 border-brand-500 pl-4 uppercase tracking-tighter">
+                      Recommendations
+                    </h2>
                     <RecommendationPanel team={team} />
                   </div>
                 </div>
               ) : (
                 <div className="text-center py-20 opacity-20 px-4">
-                  <p className="italic">Build your team first, then open Analysis to review coverage and recommendations.</p>
+                  <p className="italic">Build your team first, then open Recommendations.</p>
                 </div>
               )}
             </>
           )}
         </main>
-
-        {/* Footer */}
-        <footer className="py-8 text-center border-t border-white/5 opacity-30 text-[10px] uppercase tracking-widest">
-          Powered by PokéAPI • Built with React & Tailwind CSS
-        </footer>
       </div>
 
       <PokemonCardModal
