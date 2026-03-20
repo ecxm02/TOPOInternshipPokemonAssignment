@@ -41,7 +41,7 @@ const App = () => {
 
         <main className="container mx-auto pb-20">
           {/* --- Primary page navigation */}
-          <section className="px-4 mb-8 flex items-center justify-between">
+          <section className="px-4 mb-8 relative flex items-center justify-center">
             <div className="flex bg-white/5 p-1 rounded-lg border border-white/10 gap-1 w-fit">
               <button
                 onClick={() => setActivePage('team')}
@@ -68,7 +68,7 @@ const App = () => {
                 Recommendations
               </button>
             </div>
-            <span className="text-[10px] font-mono text-white/20">{team.length} / 6</span>
+            <span className="absolute right-4 text-[10px] font-mono text-white/20">{team.length} / 6</span>
           </section>
 
           {activePage === 'team' && (
@@ -81,7 +81,6 @@ const App = () => {
               {/* --- Team slots grid */}
               <section className="mb-16">
                 <div className="px-4 mb-4">
-                  <h2 className="text-sm font-bold uppercase tracking-widest text-white/60 text-left">Build Your Team</h2>
                 </div>
                 <TeamGrid
                   team={team}
