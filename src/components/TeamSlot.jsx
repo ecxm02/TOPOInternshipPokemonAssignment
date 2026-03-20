@@ -1,15 +1,16 @@
 import React from 'react';
 import PokemonCard from './PokemonCard';
 
-const TeamSlot = ({ pokemon, index, onRemove, chartType }) => {
+const TeamSlot = ({ pokemon, index, onRemove, chartType, onExpand }) => {
   return (
-    <div className="w-full h-full min-h-[400px]">
+    <div className="w-full h-full min-h-[400px] relative overflow-visible">
       {pokemon ? (
         <PokemonCard 
           pokemon={pokemon} 
           index={index} 
           onRemove={onRemove} 
           chartType={chartType}
+          onExpand={onExpand}
         />
       ) : (
         <div className="glass-card h-full flex flex-col items-center justify-center p-8 border-dashed border-2 border-white/10 hover:border-white/30 transition-colors group cursor-default">

@@ -3,7 +3,8 @@ import { TYPE_DATA } from './typeData';
 export const getPokemonEffectiveness = (types) => {
   const defensiveMultipliers = {};
   const offensiveAdvantages = new Set();
-  
+  const offensiveDisadvantages = new Set();
+
   types.forEach(typeName => {
     const data = TYPE_DATA[typeName.toLowerCase()];
     if (!data) return;
@@ -19,13 +20,21 @@ export const getPokemonEffectiveness = (types) => {
       if (targetData.double.includes(typeName.toLowerCase())) {
         offensiveAdvantages.add(targetType);
       }
+
+      if (targetData.half.includes(typeName.toLowerCase()) || targetData.no.includes(typeName.toLowerCase())) {
+        offensiveDisadvantages.add(targetType);
+      }
     });
   });
-  
-  const results = Object.entries(defensiveMultipliers).filter(([_, m]) => m !== 1);
+
+  // If any STAB type can hit a target super effectively, treat it as an offensive advantage.
+  offensiveAdvantages.forEach((targetType) => offensiveDisadvantages.delete(targetType));
+
+  const results = Object.entries(defensiveMultipliers).filter(([, m]) => m !== 1);
   return {
-    weaknesses: results.filter(([_, m]) => m > 1).sort((a,b) => b[1] - a[1]),
-    resistances: results.filter(([_, m]) => m < 1).sort((a,b) => a[1] - b[1]),
-    advantages: Array.from(offensiveAdvantages).sort() // Types we hit for 2x
+    weaknesses: results.filter(([, m]) => m > 1).sort((a,b) => b[1] - a[1]),
+    resistances: results.filter(([, m]) => m < 1).sort((a,b) => a[1] - b[1]),
+    advantages: Array.from(offensiveAdvantages).sort(), // Types we hit for 2x
+    disadvantages: Array.from(offensiveDisadvantages).sort() // Types we hit for <= 0.5x
   };
 };

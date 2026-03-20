@@ -12,14 +12,14 @@ const StatBarChart = ({ stats, color }) => {
   };
 
   const bst = stats.reduce((acc, s) => acc + s.base_stat, 0);
-  const bstPercentage = Math.min((bst / 720) * 100, 100);
+  const bstPercentage = Math.min((bst / 1530) * 100, 100);
 
   return (
     <div className="w-full flex flex-col gap-1.5 py-1">
       {stats.map((s) => {
         const label = statMap[s.stat.name] || s.stat.name.toUpperCase();
         const value = s.base_stat;
-        const percentage = Math.min((value / 180) * 100, 100);
+        const percentage = Math.min((value / 255) * 100, 100);
 
         return (
           <div key={s.stat.name} className="flex items-center gap-2 group/row h-5">

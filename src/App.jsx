@@ -5,10 +5,15 @@ import TeamGrid from './components/TeamGrid';
 import TypeCoverageChart from './components/TypeCoverageChart';
 import RecommendationPanel from './components/RecommendationPanel';
 import StaticBackground from './components/AnimatedBackground';
+import PokemonCardModal from './components/PokemonCardModal';
 
 const App = () => {
   const { team, addPokemon, removePokemon } = useTeam();
   const [chartType, setChartType] = useState('web');
+  const [expandedPokemon, setExpandedPokemon] = useState(null);
+
+  const openExpandedPokemon = (pokemon) => setExpandedPokemon(pokemon);
+  const closeExpandedPokemon = () => setExpandedPokemon(null);
 
   return (
     <div className="min-h-screen text-slate-200 font-inter selection:bg-brand-500/30 relative">
@@ -20,9 +25,6 @@ const App = () => {
           <h1 className="logo text-3xl md:text-5xl mb-4 tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-brand-400 to-brand-600 drop-shadow-sm">
             POKÉMON TEAM BUILDER
           </h1>
-          <p className="text-white/40 uppercase tracking-[0.3em] text-[10px] md:text-xs font-bold">
-            Analyze • Optimize • Dominate
-          </p>
         </header>
 
         <main className="container mx-auto pb-20">
@@ -53,7 +55,12 @@ const App = () => {
               </div>
               <span className="text-[10px] font-mono text-white/20">{team.length} / 6</span>
             </div>
-            <TeamGrid team={team} onRemove={removePokemon} chartType={chartType} />
+            <TeamGrid
+              team={team}
+              onRemove={removePokemon}
+              chartType={chartType}
+              onExpand={openExpandedPokemon}
+            />
           </section>
 
           {/* Analysis Section */}
@@ -78,6 +85,12 @@ const App = () => {
           Powered by PokéAPI • Built with React & Tailwind CSS
         </footer>
       </div>
+
+      <PokemonCardModal
+        pokemon={expandedPokemon}
+        chartType={chartType}
+        onClose={closeExpandedPokemon}
+      />
     </div>
   );
 };
