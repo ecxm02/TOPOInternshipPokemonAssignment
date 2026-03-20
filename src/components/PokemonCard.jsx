@@ -16,7 +16,7 @@ const MiniBadge = ({ type, multiplier }) => {
   );
 };
 
-const PokemonCard = ({ pokemon, onRemove, index, chartType: _chartType, onExpand }) => {
+const PokemonCard = ({ pokemon, onRemove, index, onExpand }) => {
   if (!pokemon) return null;
 
   const primaryType = pokemon.types[0].type.name;

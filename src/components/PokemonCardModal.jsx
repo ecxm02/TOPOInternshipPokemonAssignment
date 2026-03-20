@@ -18,7 +18,7 @@ const MiniBadge = ({ type, multiplier }) => {
   );
 };
 
-const PokemonCardModal = ({ pokemon, chartType: _chartType, onClose }) => {
+const PokemonCardModal = ({ pokemon, onClose }) => {
   useEffect(() => {
     if (!pokemon) return undefined;
 
@@ -48,12 +48,12 @@ const PokemonCardModal = ({ pokemon, chartType: _chartType, onClose }) => {
   const total = pokemon.stats.reduce((acc, s) => acc + s.base_stat, 0);
 
   const statRows = [
-    { name: 'HP', val: pokemon.stats[0].base_stat, max: 255 },
-    { name: 'DEF', val: pokemon.stats[2].base_stat, max: 230 },
-    { name: 'SpD', val: pokemon.stats[4].base_stat, max: 230 },
-    { name: 'SPE', val: pokemon.stats[5].base_stat, max: 200 },
-    { name: 'ATK', val: pokemon.stats[1].base_stat, max: 190 },
-    { name: 'SpA', val: pokemon.stats[3].base_stat, max: 194 }
+    { name: 'HP', val: pokemon.stats[0].base_stat },
+    { name: 'DEF', val: pokemon.stats[2].base_stat },
+    { name: 'SpD', val: pokemon.stats[4].base_stat },
+    { name: 'SPE', val: pokemon.stats[5].base_stat },
+    { name: 'ATK', val: pokemon.stats[1].base_stat },
+    { name: 'SpA', val: pokemon.stats[3].base_stat }
   ];
 
   return (
@@ -142,7 +142,7 @@ const PokemonCardModal = ({ pokemon, chartType: _chartType, onClose }) => {
                 <div key={row.name} className="flex items-center gap-2">
                   <span className="w-8 text-[18px] font-black text-white/92 uppercase tracking-tighter shrink-0">{row.name}</span>
                   <div className="flex-1 h-2.5 bg-white/8 rounded-full overflow-hidden">
-                    <div className="h-full rounded-full transition-all duration-1000" style={{ width: `${Math.min((row.val / row.max) * 100, 100)}%`, backgroundColor: themeColor }} />
+                    <div className="h-full rounded-full transition-all duration-1000" style={{ width: `${Math.min((row.val / 255) * 100, 100)}%`, backgroundColor: themeColor }} />
                   </div>
                   <span className="w-8 text-[20px] font-mono font-black text-white/92 text-right shrink-0">{row.val}</span>
                 </div>
@@ -156,7 +156,7 @@ const PokemonCardModal = ({ pokemon, chartType: _chartType, onClose }) => {
                   <div
                     className="h-full rounded-full transition-all duration-1000"
                     style={{
-                      width: `${Math.min((total / 780) * 100, 100)}%`,
+                      width: `${Math.min((total / 1530) * 100, 100)}%`,
                       backgroundColor: themeColor,
                       boxShadow: `0 0 15px ${themeColor}80`
                     }}

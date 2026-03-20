@@ -1,7 +1,7 @@
 import React from 'react';
 import PokemonCard from './PokemonCard';
 
-const TeamSlot = ({ pokemon, index, onRemove, chartType, onExpand }) => {
+const TeamSlot = ({ pokemon, index, onRemove, onExpand }) => {
   return (
     <div className="w-full h-full min-h-[400px] relative overflow-visible">
       {pokemon ? (
@@ -9,7 +9,6 @@ const TeamSlot = ({ pokemon, index, onRemove, chartType, onExpand }) => {
           pokemon={pokemon} 
           index={index} 
           onRemove={onRemove} 
-          chartType={chartType}
           onExpand={onExpand}
         />
       ) : (
