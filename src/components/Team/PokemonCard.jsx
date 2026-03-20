@@ -49,7 +49,7 @@ const PokemonCard = ({ pokemon, onRemove, index, onExpand }) => {
               e.stopPropagation();
               onRemove?.(index);
             }}
-            className="p-1 rounded-md bg-white/20 text-white/40 hover:bg-red-500/20 hover:text-red-500 transition-all cursor-pointer"
+            className="p-1 rounded-md bg-red-500/15 text-red-400 hover:bg-red-500/30 hover:text-red-300 transition-all cursor-pointer"
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 7h12M9 7V5a1 1 0 011-1h4a1 1 0 011 1v2m-8 0l1 12a1 1 0 001 .9h6a1 1 0 001-.9L17 7" />
