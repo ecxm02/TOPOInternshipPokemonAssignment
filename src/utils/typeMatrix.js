@@ -1,6 +1,7 @@
 import { TYPE_DATA } from './typeData';
 
 export const calculateTeamWeaknesses = async (team) => {
+  // --- Track how many team members are weak to each attack type
   const weaknesses = {};
 
   for (const pokemon of team) {
@@ -13,23 +14,23 @@ export const calculateTeamWeaknesses = async (team) => {
       const data = TYPE_DATA[typeName.toLowerCase()];
       if (!data) continue;
 
-      // Double damage from
+      // --- Double damage from
       data.double.forEach(t => {
         pokemonDamageMultipliers[t] = (pokemonDamageMultipliers[t] || 1) * 2;
       });
 
-      // Half damage from
+      // --- Half damage from
       data.half.forEach(t => {
         pokemonDamageMultipliers[t] = (pokemonDamageMultipliers[t] || 1) * 0.5;
       });
 
-      // No damage from
+      // --- No damage from
       data.no.forEach(t => {
         pokemonDamageMultipliers[t] = 0;
       });
     }
 
-    // Now check which types do > 1x damage to THIS Pokemon
+    // --- Record attack types that deal super-effective damage
     Object.entries(pokemonDamageMultipliers).forEach(([attackType, multiplier]) => {
       if (multiplier > 1) {
         if (!weaknesses[attackType]) {

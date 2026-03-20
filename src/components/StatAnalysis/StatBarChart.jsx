@@ -1,7 +1,7 @@
 import React from 'react';
 
 const StatBarChart = ({ stats, color }) => {
-  // Map PokeAPI stats to simplified keys
+  // --- Convert PokeAPI stat keys into compact chart labels
   const statMap = {
     'hp': 'HP',
     'attack': 'ATK',
@@ -15,6 +15,7 @@ const StatBarChart = ({ stats, color }) => {
   const bstPercentage = Math.min((bst / 1530) * 100, 100);
 
   return (
+    // --- Render per-stat progress bars plus total BST row
     <div className="w-full flex flex-col gap-1.5 py-1">
       {stats.map((s) => {
         const label = statMap[s.stat.name] || s.stat.name.toUpperCase();
@@ -23,10 +24,10 @@ const StatBarChart = ({ stats, color }) => {
 
         return (
           <div key={s.stat.name} className="flex items-center gap-2 group/row h-5">
-            {/* Stat Name */}
+            {/* --- Stat label */}
             <span className="text-[15px] font-black uppercase opacity-40 w-6 text-left tracking-tighter shrink-0">{label}</span>
 
-            {/* Progress Bar (Thicker) */}
+            {/* --- Stat progress bar */}
             <div className="flex-1 h-3 bg-white/5 rounded-full overflow-hidden border border-white/5 relative">
               <div
                 className="h-full transition-all duration-1000 ease-out rounded-full"
@@ -38,13 +39,13 @@ const StatBarChart = ({ stats, color }) => {
               />
             </div>
 
-            {/* Stat Value */}
+            {/* --- Raw stat value */}
             <span className="text-[15px] font-mono font-black opacity-60 w-6 text-right shrink-0">{value}</span>
           </div>
         );
       })}
 
-      {/* Total BST Row */}
+      {/* --- Base stat total row */}
       <div className="flex items-center gap-2 pt-1 border-t border-white/5 h-6">
         <span className="text-[15px] font-black uppercase text-brand-400 w-6 text-left tracking-tighter shrink-0 leading-none">BST</span>
 

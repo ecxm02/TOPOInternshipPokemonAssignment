@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 
 const StaticBackground = () => {
+  // --- Generated sprite rows for the decorative background
   const [rows, setRows] = useState([]);
 
   useEffect(() => {
-    // Generate 5 rows of static high-res Pokemon
+    // --- Build random Pokemon sprites for each row
     const newRows = Array.from({ length: 5 }, (_, rowIndex) => {
-      const pokemonCount = 10; // Fewer images for a cleaner static look
+      const pokemonCount = 10;
       const pokemonIds = Array.from({ length: pokemonCount }, () => Math.floor(Math.random() * 649) + 1);
       
       return {
@@ -23,6 +24,7 @@ const StaticBackground = () => {
   }, []);
 
   return (
+    // --- Render the fixed wallpaper behind all app content
     <div className="fixed inset-0 overflow-hidden pointer-events-none z-0 select-none opacity-15">
       {rows.map((row, rowIndex) => (
         <div 

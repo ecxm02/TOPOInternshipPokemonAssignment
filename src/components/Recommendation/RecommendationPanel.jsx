@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
-import { classifyRole } from '../utils/roleClassifier';
-import { getPokemonEffectiveness } from '../utils/typeAnalysis';
+import { classifyRole } from '../../utils/roleClassifier';
+import { getPokemonEffectiveness } from '../../utils/typeAnalysis';
 
 const TYPE_ORDER = [
   'normal', 'fire', 'water', 'grass', 'electric', 'ice',
@@ -22,6 +22,7 @@ const formatPokemonName = (name) => name
   .join('-');
 
 const RecommendationPanel = ({ team }) => {
+  // --- Generate recommendation cards from role and type coverage gaps
   const recommendations = useMemo(() => {
     if (team.length === 0) {
       return [
@@ -136,6 +137,7 @@ const RecommendationPanel = ({ team }) => {
   }, [team]);
 
   return (
+    // --- Render recommendation list with severity styling
     <div className="space-y-4">
       {recommendations.map((item, i) => (
         <div

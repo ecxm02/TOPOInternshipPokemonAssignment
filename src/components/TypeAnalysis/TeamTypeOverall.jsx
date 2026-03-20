@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
-import { getPokemonEffectiveness } from '../utils/typeAnalysis';
-import { typeColors } from '../utils/typeColors';
+import { getPokemonEffectiveness } from '../../utils/typeAnalysis';
+import { typeColors } from '../../utils/typeColors';
 
 const TYPE_ORDER = [
   'normal', 'fire', 'water', 'grass', 'electric', 'ice',
@@ -9,6 +9,7 @@ const TYPE_ORDER = [
 ];
 
 const TeamTypeOverall = ({ team }) => {
+  // --- Compute team-wide type gaps for offense and defense
   const summary = useMemo(() => {
     const coveredAdvantages = new Set();
     const coveredResistances = new Set();
@@ -32,6 +33,7 @@ const TeamTypeOverall = ({ team }) => {
     };
   }, [team]);
 
+  // --- Local mini badge for compact type chips
   const TypeBadge = ({ type }) => (
     <div
       className="flex items-center gap-1 px-2.5 py-1 rounded-md text-[10px] font-black uppercase tracking-wide text-white shadow-sm"
@@ -41,6 +43,7 @@ const TeamTypeOverall = ({ team }) => {
     </div>
   );
 
+  // --- Render either gap chips or a success message
   const renderGapList = (items, clearMessage) => {
     if (items.length === 0) {
       return <span className="text-[10px] text-emerald-300/90 font-bold">{clearMessage}</span>;
@@ -52,6 +55,7 @@ const TeamTypeOverall = ({ team }) => {
   };
 
   return (
+    // --- Two-column gap summary cards
     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
       <div className="rounded-xl bg-black/35 border border-white/10 p-3 flex flex-col gap-2">
         <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white/90">No One In Team Is Resistant Against</span>

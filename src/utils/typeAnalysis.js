@@ -1,6 +1,7 @@
 import { TYPE_DATA } from './typeData';
 
 export const getPokemonEffectiveness = (types) => {
+  // --- Aggregate outgoing and incoming multipliers for dual-type Pokemon
   const defensiveMultipliers = {};
   const offensiveAdvantages = new Set();
   const offensiveDisadvantages = new Set();
@@ -9,13 +10,12 @@ export const getPokemonEffectiveness = (types) => {
     const data = TYPE_DATA[typeName.toLowerCase()];
     if (!data) return;
     
-    // Defensive Logic (Incoming damage)
+    // --- Defensive multipliers (incoming damage)
     data.double.forEach(t => defensiveMultipliers[t] = (defensiveMultipliers[t] || 1) * 2);
     data.half.forEach(t => defensiveMultipliers[t] = (defensiveMultipliers[t] || 1) * 0.5);
     data.no.forEach(t => defensiveMultipliers[t] = 0);
 
-    // Offensive Logic (Outgoing damage)
-    // We can derive this from TYPE_DATA by checking which types are weak to our current type
+    // --- Offensive multipliers (outgoing damage)
     Object.entries(TYPE_DATA).forEach(([targetType, targetData]) => {
       if (targetData.double.includes(typeName.toLowerCase())) {
         offensiveAdvantages.add(targetType);
@@ -27,7 +27,7 @@ export const getPokemonEffectiveness = (types) => {
     });
   });
 
-  // If any STAB type can hit a target super effectively, treat it as an offensive advantage.
+  // --- Favor advantages over disadvantages when any STAB type can hit effectively
   offensiveAdvantages.forEach((targetType) => offensiveDisadvantages.delete(targetType));
 
   const results = Object.entries(defensiveMultipliers).filter(([, m]) => m !== 1);

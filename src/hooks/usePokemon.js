@@ -1,19 +1,21 @@
-import { useState, useRef, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 
-// Cache in memory for this session
+// --- In-memory cache for the active browser session
 const cacheMap = {};
 
 export const usePokemon = () => {
+  // --- Request state for the selected Pokemon lookup
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  // --- Fetch Pokemon by name or ID with cache-first behavior
   const fetchPokemon = useCallback(async (nameOrId) => {
     if (!nameOrId) return;
     
     const query = typeof nameOrId === 'string' ? nameOrId.toLowerCase() : nameOrId;
     
-    // Check Cache First
+    // --- Return cached result when available
     if (cacheMap[query]) {
       setData(cacheMap[query]);
       setError(null);
@@ -33,9 +35,8 @@ export const usePokemon = () => {
       
       const result = await response.json();
       
-      // Save to Cache
+      // --- Save lookup result under multiple keys
       cacheMap[query] = result;
-      // Also cache by both name and ID
       cacheMap[result.id] = result;
       cacheMap[result.name] = result;
 

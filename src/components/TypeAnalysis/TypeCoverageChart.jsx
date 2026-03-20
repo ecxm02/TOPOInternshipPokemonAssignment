@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
-import { getPokemonEffectiveness } from '../utils/typeAnalysis';
-import { typeColors } from '../utils/typeColors';
+import { getPokemonEffectiveness } from '../../utils/typeAnalysis';
+import { typeColors } from '../../utils/typeColors';
 
 const TYPE_ORDER = [
   'normal', 'fire', 'water', 'grass', 'electric', 'ice',
@@ -9,6 +9,7 @@ const TYPE_ORDER = [
 ];
 
 const TypeCoverageChart = ({ team }) => {
+  // --- Build four type coverage sections from current team
   const sections = useMemo(() => {
     const perPokemon = team.map((pokemon) => {
       const typeNames = pokemon.types.map((t) => t.type.name);
@@ -57,6 +58,7 @@ const TypeCoverageChart = ({ team }) => {
     ];
   }, [team]);
 
+  // --- Prefer animated sprite, then fallback to static art
   const getSprite = (pokemon) => (
     pokemon.sprites.versions?.['generation-v']?.['black-white']?.animated?.front_default
     || pokemon.sprites.front_default
@@ -64,6 +66,7 @@ const TypeCoverageChart = ({ team }) => {
   );
 
   return (
+    // --- Render coverage matrix sections
     <div className="grid grid-cols-1 gap-4">
       {sections.map((section) => (
         <div key={section.key} className="rounded-xl bg-black/35 border border-white/10 p-4 flex flex-col gap-3">

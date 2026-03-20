@@ -4,6 +4,7 @@ import PokemonCard from './PokemonCard';
 const TeamSlot = ({ pokemon, index, onRemove, onExpand, onRequestAdd }) => {
   return (
     <div className="w-full h-full min-h-[400px] relative overflow-visible">
+      {/* --- Filled slot: show the selected Pokemon card */}
       {pokemon ? (
         <PokemonCard 
           pokemon={pokemon} 
@@ -12,6 +13,7 @@ const TeamSlot = ({ pokemon, index, onRemove, onExpand, onRequestAdd }) => {
           onExpand={onExpand}
         />
       ) : (
+        /* --- Empty slot: quick action to return to search */
         <button
           type="button"
           onClick={onRequestAdd}

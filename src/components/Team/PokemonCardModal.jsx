@@ -1,10 +1,12 @@
 import React, { useEffect } from 'react';
-import TypeBadge from './TypeBadge';
-import StatRadarChart from './StatRadarChart';
-import { typeColors } from '../utils/typeColors';
-import { getPokemonEffectiveness } from '../utils/typeAnalysis';
-import { classifyRole } from '../utils/roleClassifier';
+import TypeBadge from '../Misc/TypeBadge';
+import StatRadarChart from '../StatAnalysis/StatRadarChart';
+import { typeColors } from '../../utils/typeColors';
+import { getPokemonEffectiveness } from '../../utils/typeAnalysis';
+import { classifyRole } from '../../utils/roleClassifier';
+import { TYPE_DATA } from '../../utils/typeData';
 
+// --- Compact badge used in effectiveness lists
 const MiniBadge = ({ type, multiplier }) => {
   const color = typeColors[type] || '#3b82f6';
 
@@ -14,12 +16,29 @@ const MiniBadge = ({ type, multiplier }) => {
       style={{ backgroundColor: `${color}cc` }}
     >
       <span>{type.substring(0, 3)}</span>
-      {multiplier ? <span className="text-[9px] text-white/90">{multiplier}x</span> : null}
+      {multiplier !== undefined && multiplier !== null ? <span className="text-[9px] text-white/90">{multiplier}x</span> : null}
     </div>
   );
 };
 
+const getOffensiveMultiplierAgainstType = (attackerTypes, targetType) => {
+  const targetData = TYPE_DATA[targetType?.toLowerCase()];
+  if (!targetData) return 1;
+
+  // --- Use the best STAB option the Pokemon has against this target type
+  const multipliers = attackerTypes.map((attackerType) => {
+    const attackType = attackerType.toLowerCase();
+    if (targetData.no.includes(attackType)) return 0;
+    if (targetData.half.includes(attackType)) return 0.5;
+    if (targetData.double.includes(attackType)) return 2;
+    return 1;
+  });
+
+  return multipliers.length > 0 ? Math.max(...multipliers) : 1;
+};
+
 const PokemonCardModal = ({ pokemon, onClose }) => {
+  // --- Modal lifecycle: lock scroll and support Escape to close
   useEffect(() => {
     if (!pokemon) return undefined;
 
@@ -40,12 +59,16 @@ const PokemonCardModal = ({ pokemon, onClose }) => {
 
   if (!pokemon) return null;
 
+  // --- Derived values used throughout modal sections
   const typeNames = pokemon.types.map((t) => t.type.name);
   const primaryType = pokemon.types[0].type.name;
   const themeColor = typeColors[primaryType] || '#3b82f6';
   const animatedSprite = pokemon.sprites.versions?.['generation-v']?.['black-white']?.animated?.front_default || pokemon.sprites.front_default;
   const officialPhoto = pokemon.sprites.other?.['official-artwork']?.front_default || pokemon.sprites.front_default;
   const { advantages, disadvantages, weaknesses, resistances } = getPokemonEffectiveness(typeNames);
+  const effectiveDisadvantages = disadvantages
+    .map((type) => ({ type, multiplier: getOffensiveMultiplierAgainstType(typeNames, type) }))
+    .filter(({ multiplier }) => multiplier < 1);
   const total = pokemon.stats.reduce((acc, s) => acc + s.base_stat, 0);
   const roleLabel = classifyRole(pokemon.stats);
   const roleTone = roleLabel.includes('Sweeper')
@@ -66,6 +89,7 @@ const PokemonCardModal = ({ pokemon, onClose }) => {
   ];
 
   return (
+    // --- Modal overlay and content shell
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4"
       onClick={onClose}
@@ -76,6 +100,7 @@ const PokemonCardModal = ({ pokemon, onClose }) => {
       <div className="relative w-full max-w-6xl" onClick={(event) => event.stopPropagation()}>
         <div className="glass-card p-5 md:p-6 relative overflow-hidden flex flex-col gap-6">
           <div className="flex items-center justify-between border-b border-white/10 pb-3">
+            {/* --- Header: name, role tag, sprite, and close button */}
             <div className="flex items-center gap-2 min-w-0">
               <h3 className="capitalize text-xl md:text-2xl font-black tracking-tight truncate">{pokemon.name}</h3>
               <span
@@ -109,11 +134,13 @@ const PokemonCardModal = ({ pokemon, onClose }) => {
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-[220px_1fr] gap-4 items-start">
+            {/* --- Left: official artwork */}
             <div className="flex justify-center relative">
               <div className="absolute inset-0 rounded-full blur-2xl opacity-35 pointer-events-none" style={{ backgroundColor: themeColor }}></div>
               <img src={officialPhoto} alt={pokemon.name} className="max-h-52 max-w-full object-contain drop-shadow-[0_14px_24px_rgba(0,0,0,0.45)] relative z-10" />
             </div>
 
+            {/* --- Right: offensive and defensive effectiveness blocks */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               <div className="rounded-xl bg-black/35 border border-white/10 p-3 flex flex-col gap-2">
                 <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white/90">Deals Extra Damage To</span>
@@ -127,8 +154,8 @@ const PokemonCardModal = ({ pokemon, onClose }) => {
               <div className="rounded-xl bg-black/35 border border-white/10 p-3 flex flex-col gap-2">
                 <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white/90">Deals Less Damage To</span>
                 <div className="flex flex-wrap gap-2">
-                  {disadvantages.length > 0 ? disadvantages.map((type) => (
-                    <MiniBadge key={type} type={type} multiplier={0.5} />
+                  {effectiveDisadvantages.length > 0 ? effectiveDisadvantages.map(({ type, multiplier }) => (
+                    <MiniBadge key={type} type={type} multiplier={multiplier} />
                   )) : <span className="text-[10px] text-white/40 italic">None</span>}
                 </div>
               </div>
@@ -154,6 +181,7 @@ const PokemonCardModal = ({ pokemon, onClose }) => {
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 p-4 rounded-xl bg-black/35 border border-white/10 shadow-xl relative overflow-hidden">
+            {/* --- Lower panel: stat bars plus radar chart */}
             <div className="absolute top-0 right-0 w-40 h-40 blur-[55px] pointer-events-none -mr-20 -mt-20" style={{ backgroundColor: `${themeColor}33` }}></div>
 
             <div className="flex flex-col gap-3 relative z-10">

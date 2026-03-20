@@ -6,11 +6,13 @@ const INDEX_API_URL = 'https://pokeapi.co/api/v2/pokemon?limit=1302&offset=0';
 let memoryIndex = null;
 let pendingIndexRequest = null;
 
+// --- Extract Pokemon ID from the API result URL
 const parsePokemonIdFromUrl = (url) => {
   const segments = url.split('/').filter(Boolean);
   return Number(segments[segments.length - 1]);
 };
 
+// --- Load cached index from localStorage when available
 const loadFromStorage = () => {
   try {
     const raw = window.localStorage.getItem(INDEX_STORAGE_KEY);
@@ -25,6 +27,7 @@ const loadFromStorage = () => {
   }
 };
 
+// --- Persist fetched index to localStorage
 const saveToStorage = (index) => {
   try {
     window.localStorage.setItem(INDEX_STORAGE_KEY, JSON.stringify(index));
@@ -33,6 +36,7 @@ const saveToStorage = (index) => {
   }
 };
 
+// --- Shared index fetch to avoid duplicate network requests
 const fetchPokemonIndex = async () => {
   if (memoryIndex) return memoryIndex;
 
@@ -69,10 +73,12 @@ const fetchPokemonIndex = async () => {
 };
 
 export const usePokemonIndex = () => {
+  // --- Search index hook state
   const [pokemonIndex, setPokemonIndex] = useState(memoryIndex || []);
   const [loading, setLoading] = useState(!memoryIndex);
   const [error, setError] = useState(null);
 
+  // --- Initial load for index data
   useEffect(() => {
     let isMounted = true;
 

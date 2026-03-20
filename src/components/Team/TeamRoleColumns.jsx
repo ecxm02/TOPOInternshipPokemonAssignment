@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { classifyRole } from '../utils/roleClassifier';
+import { classifyRole } from '../../utils/roleClassifier';
 
 const ROLE_COLUMNS = [
   {
@@ -35,6 +35,7 @@ const ROLE_COLUMNS = [
 ];
 
 const TeamRoleColumns = ({ team }) => {
+  // --- Group current team members into role buckets
   const grouped = useMemo(() => {
     const byColumn = ROLE_COLUMNS.map((column) => ({ ...column, pokemons: [] }));
 
@@ -49,6 +50,7 @@ const TeamRoleColumns = ({ team }) => {
     return byColumn;
   }, [team]);
 
+  // --- Prefer animated sprite, then fallback to static art
   const getSprite = (pokemon) => (
     pokemon.sprites.versions?.['generation-v']?.['black-white']?.animated?.front_default
     || pokemon.sprites.front_default
@@ -56,6 +58,7 @@ const TeamRoleColumns = ({ team }) => {
   );
 
   return (
+    // --- Render one column per role class
     <div className="rounded-xl bg-black/35 border border-white/10 p-4 md:p-5 mb-6">
       <h3 className="text-[11px] font-black uppercase tracking-[0.28em] text-white/85 mb-4 text-center">Role Distribution</h3>
 

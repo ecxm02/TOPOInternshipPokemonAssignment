@@ -1,7 +1,8 @@
 import React from 'react';
-import { typeColors } from '../utils/typeColors';
+import { typeColors } from '../../utils/typeColors';
 
 const TypeBadge = ({ type }) => {
+  // --- Resolve color token from Pokemon type name
   const color = typeColors[type.toLowerCase()] || '#777';
 
   return (

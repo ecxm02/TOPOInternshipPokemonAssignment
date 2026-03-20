@@ -9,8 +9,7 @@ import {
 } from 'recharts';
 
 const StatRadarChart = ({ stats, color }) => {
-  // Map PokeAPI stats to Recharts format
-  // PokeAPI stats are: hp, attack, defense, special-attack, special-defense, speed
+  // --- Map PokeAPI stats into radar-friendly display labels
   const data = stats.map(s => {
     let name = '';
     switch (s.stat.name) {
@@ -29,6 +28,7 @@ const StatRadarChart = ({ stats, color }) => {
   });
 
   return (
+    // --- Recharts radar visualization
     <div className="w-full h-72 mt-2">
       <ResponsiveContainer width="100%" height="100%">
         <RadarChart cx="50%" cy="50%" outerRadius="85%" data={data}>

@@ -1,22 +1,24 @@
 import React, { useState } from 'react';
 import { useTeam } from './hooks/useTeam';
-import SearchBar from './components/SearchBar';
-import TeamGrid from './components/TeamGrid';
-import TypeCoverageChart from './components/TypeCoverageChart';
-import TeamTypeOverall from './components/TeamTypeOverall';
-import TeamStatChart from './components/TeamStatChart';
-import TeamRoleColumns from './components/TeamRoleColumns';
-import RecommendationPanel from './components/RecommendationPanel';
-import StaticBackground from './components/AnimatedBackground';
-import PokemonCardModal from './components/PokemonCardModal';
+import SearchBar from './components/Misc/SearchBar';
+import TeamGrid from './components/Team/TeamGrid';
+import TypeCoverageChart from './components/TypeAnalysis/TypeCoverageChart';
+import TeamTypeOverall from './components/TypeAnalysis/TeamTypeOverall';
+import TeamStatChart from './components/Team/TeamStatChart';
+import TeamRoleColumns from './components/Team/TeamRoleColumns';
+import RecommendationPanel from './components/Recommendation/RecommendationPanel';
+import StaticBackground from './components/Misc/AnimatedBackground';
+import PokemonCardModal from './components/Team/PokemonCardModal';
 
 const App = () => {
+  // --- Team and page view state
   const { team, addPokemon, removePokemon } = useTeam();
   const [activePage, setActivePage] = useState('team');
   const [typeAnalysisView, setTypeAnalysisView] = useState('overall');
   const [expandedPokemon, setExpandedPokemon] = useState(null);
   const [searchFocusSignal, setSearchFocusSignal] = useState(0);
 
+  // --- UI action handlers
   const openExpandedPokemon = (pokemon) => setExpandedPokemon(pokemon);
   const closeExpandedPokemon = () => setExpandedPokemon(null);
   const focusSearchBar = () => {
@@ -26,10 +28,11 @@ const App = () => {
 
   return (
     <div className="min-h-screen text-slate-200 font-inter selection:bg-brand-500/30 relative">
+      {/* --- Decorative background layer */}
       <StaticBackground />
       
       <div className="relative z-10">
-        {/* Header */}
+        {/* --- App header */}
         <header className="py-12 px-4 text-center">
           <h1 className="logo text-3xl md:text-5xl mb-4 tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-brand-400 to-brand-600 drop-shadow-sm">
             POKÉMON TEAM BUILDER
@@ -37,6 +40,7 @@ const App = () => {
         </header>
 
         <main className="container mx-auto pb-20">
+          {/* --- Primary page navigation */}
           <section className="px-4 mb-8 flex items-center justify-between">
             <div className="flex bg-white/5 p-1 rounded-lg border border-white/10 gap-1 w-fit">
               <button
@@ -69,12 +73,12 @@ const App = () => {
 
           {activePage === 'team' && (
             <>
-              {/* Search Section */}
+              {/* --- Team search panel */}
               <section className="mb-8">
                 <SearchBar onAdd={addPokemon} teamSize={team.length} focusSignal={searchFocusSignal} />
               </section>
 
-              {/* Team Grid Section */}
+              {/* --- Team slots grid */}
               <section className="mb-16">
                 <div className="px-4 mb-4">
                   <h2 className="text-sm font-bold uppercase tracking-widest text-white/60 text-left">Build Your Team</h2>
@@ -91,6 +95,7 @@ const App = () => {
 
           {activePage === 'type-analysis' && (
             <>
+              {/* --- Type analysis page */}
               {team.length > 0 ? (
                 <div className="animate-in fade-in slide-in-from-bottom-8 duration-700 px-4">
                   <div className="glass-card p-6 mb-8">
@@ -132,6 +137,7 @@ const App = () => {
 
           {activePage === 'stat-analysis' && (
             <>
+              {/* --- Stat analysis page */}
               {team.length > 0 ? (
                 <div className="animate-in fade-in slide-in-from-bottom-8 duration-700 px-4">
                   <div className="glass-card p-6">
@@ -152,6 +158,7 @@ const App = () => {
 
           {activePage === 'recommendations' && (
             <>
+              {/* --- Recommendation page */}
               {team.length > 0 ? (
                 <div className="animate-in fade-in slide-in-from-bottom-8 duration-700 px-4">
                   <div className="glass-card p-6">
@@ -171,6 +178,7 @@ const App = () => {
         </main>
       </div>
 
+      {/* --- Expanded Pokemon modal */}
       <PokemonCardModal
         pokemon={expandedPokemon}
         onClose={closeExpandedPokemon}

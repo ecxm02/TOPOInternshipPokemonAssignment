@@ -1,5 +1,6 @@
 const normalize = (value) => (value || '').toLowerCase().trim();
 
+// --- Character-edit distance for fallback fuzzy matching
 const levenshteinDistance = (a, b) => {
   const rows = a.length + 1;
   const cols = b.length + 1;
@@ -22,6 +23,7 @@ const levenshteinDistance = (a, b) => {
   return matrix[a.length][b.length];
 };
 
+// --- Gap score for ordered subsequence matches
 const subsequenceGapScore = (target, query) => {
   let targetIndex = 0;
   let gaps = 0;
@@ -37,6 +39,7 @@ const subsequenceGapScore = (target, query) => {
   return gaps;
 };
 
+// --- Composite ranking score for a single Pokemon entry
 const getMatchScore = (pokemon, rawQuery) => {
   const query = normalize(rawQuery);
   const name = normalize(pokemon.name);
@@ -65,6 +68,7 @@ const getMatchScore = (pokemon, rawQuery) => {
   return Number.POSITIVE_INFINITY;
 };
 
+// --- Return top-ranked matches for autocomplete suggestions
 export const rankPokemonMatches = (pokemonList, query, limit = 8) => {
   const normalizedQuery = normalize(query);
   if (!normalizedQuery || !Array.isArray(pokemonList) || pokemonList.length === 0) {

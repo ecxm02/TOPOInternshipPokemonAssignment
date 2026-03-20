@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
-import { usePokemon } from '../hooks/usePokemon';
-import { usePokemonIndex } from '../hooks/usePokemonIndex';
-import { rankPokemonMatches } from '../utils/fuzzySearch';
+import { usePokemon } from '../../hooks/usePokemon';
+import { usePokemonIndex } from '../../hooks/usePokemonIndex';
+import { rankPokemonMatches } from '../../utils/fuzzySearch';
 
 const SearchBar = ({ onAdd, teamSize, focusSignal = 0 }) => {
+  // --- Local search input state
   const [query, setQuery] = useState('');
   const [debouncedQuery, setDebouncedQuery] = useState('');
   const [isFocused, setIsFocused] = useState(false);
@@ -13,7 +14,7 @@ const SearchBar = ({ onAdd, teamSize, focusSignal = 0 }) => {
   const containerRef = useRef(null);
   const inputRef = useRef(null);
 
-  // Debounce logic
+  // --- Debounce user input before scoring matches
   useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedQuery(query.trim().toLowerCase());
@@ -22,6 +23,7 @@ const SearchBar = ({ onAdd, teamSize, focusSignal = 0 }) => {
     return () => clearTimeout(timer);
   }, [query]);
 
+  // --- Rank suggestions using fuzzy matching
   const suggestions = useMemo(
     () => rankPokemonMatches(pokemonIndex, debouncedQuery, 8),
     [pokemonIndex, debouncedQuery]
@@ -29,7 +31,7 @@ const SearchBar = ({ onAdd, teamSize, focusSignal = 0 }) => {
 
   const showDropdown = isFocused && query.trim().length > 0;
 
-  // Close dropdown when clicking outside
+  // --- Close dropdown when clicking outside the search area
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (containerRef.current && !containerRef.current.contains(event.target)) {
@@ -41,6 +43,7 @@ const SearchBar = ({ onAdd, teamSize, focusSignal = 0 }) => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  // --- Re-focus search input when requested by team slot actions
   useEffect(() => {
     if (!focusSignal) return;
 
@@ -49,6 +52,7 @@ const SearchBar = ({ onAdd, teamSize, focusSignal = 0 }) => {
     setIsFocused(true);
   }, [focusSignal]);
 
+  // --- Fetch and add selected Pokemon to the team
   const handleSelect = async (nameOrId) => {
     if (teamSize >= 6) return;
 
@@ -65,6 +69,7 @@ const SearchBar = ({ onAdd, teamSize, focusSignal = 0 }) => {
   };
 
   return (
+    // --- Search input and suggestion dropdown UI
     <div ref={containerRef} className="relative w-full max-w-md mx-auto mb-12 px-4">
       <div className="relative group">
         <input

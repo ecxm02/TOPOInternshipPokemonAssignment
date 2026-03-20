@@ -4,6 +4,7 @@ const TEAM_STAT_MAX = 255 * 6;
 const TEAM_TOTAL_MAX = 1530 * 6;
 
 const TeamStatChart = ({ team }) => {
+  // --- Aggregate team-wide stat totals for chart rows
   const summary = useMemo(() => {
     const totals = {
       hp: 0,
@@ -37,6 +38,7 @@ const TeamStatChart = ({ team }) => {
   }, [team]);
 
   return (
+    // --- Render stat rows and total progress bar
     <div className="rounded-xl bg-black/35 border border-white/10 p-4 md:p-5 shadow-xl relative overflow-hidden mb-6">
       <div className="absolute top-0 right-0 w-44 h-44 blur-[60px] pointer-events-none -mr-20 -mt-20 bg-brand-500/10"></div>
 

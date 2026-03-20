@@ -1,8 +1,9 @@
 import React from 'react';
-import TypeBadge from './TypeBadge';
-import { typeColors } from '../utils/typeColors';
-import { getPokemonEffectiveness } from '../utils/typeAnalysis';
+import TypeBadge from '../Misc/TypeBadge';
+import { typeColors } from '../../utils/typeColors';
+import { getPokemonEffectiveness } from '../../utils/typeAnalysis';
 
+// --- Compact type badge used in matchup summary rows
 const MiniBadge = ({ type, multiplier }) => {
   const color = typeColors[type] || '#3b82f6';
 
@@ -19,6 +20,7 @@ const MiniBadge = ({ type, multiplier }) => {
 const PokemonCard = ({ pokemon, onRemove, index, onExpand }) => {
   if (!pokemon) return null;
 
+  // --- Derived display and matchup values
   const primaryType = pokemon.types[0].type.name;
   const themeColor = typeColors[primaryType] || '#3b82f6';
   const { weaknesses } = getPokemonEffectiveness(pokemon.types.map(t => t.type.name));
@@ -31,7 +33,7 @@ const PokemonCard = ({ pokemon, onRemove, index, onExpand }) => {
       className="glass-card p-5 relative z-0 group overflow-hidden flex flex-col gap-4 transform transform-gpu transition-transform duration-300 ease-out will-change-transform hover:z-20 hover:scale-105 hover:-translate-y-1 hover:shadow-2xl cursor-pointer"
       onClick={() => onExpand?.(pokemon)}
     >
-      {/* Top Section: Identity */}
+      {/* --- Identity row: name, sprite, type badges, remove action */}
       <div className="flex items-center justify-between border-b border-white/5 pb-3">
         <div className="flex items-center gap-2">
           <h3 className="capitalize text-lg font-black tracking-tight whitespace-nowrap">{pokemon.name}</h3>
@@ -57,9 +59,9 @@ const PokemonCard = ({ pokemon, onRemove, index, onExpand }) => {
         </div>
       </div>
 
-      {/* Main Body: 2-2-1 Grid Refactor */}
+      {/* --- Main content: matchup summary and stat bars */}
       <div className="flex flex-col gap-6">
-        {/* Row 1: Photo LEFT (25%) | Type Analysis RIGHT (75%) */}
+        {/* --- Artwork and matchup badges */}
         <div className="grid grid-cols-[1fr_3fr] gap-4 items-center">
           <div className="flex justify-center relative">
             <div className="absolute inset-0 rounded-full blur-[40px] opacity-30 pointer-events-none" style={{ backgroundColor: themeColor }}></div>
@@ -91,13 +93,13 @@ const PokemonCard = ({ pokemon, onRemove, index, onExpand }) => {
           </div>
         </div>
 
-        {/* Unified Stats & BST Container */}
+        {/* --- Stat bars and base stat total */}
         <div className="flex flex-col gap-3 p-4 rounded-xl bg-black/30 border border-white/10 shadow-xl relative overflow-hidden">
-          {/* Background Glow */}
+          {/* --- Decorative glow */}
           <div className="absolute top-0 right-0 w-32 h-32 bg-brand-500/10 blur-[50px] pointer-events-none -mr-16 -mt-16"></div>
 
           <div className="grid grid-cols-2 gap-6 relative z-10">
-            {/* Defensive Block */}
+            {/* --- Defensive stats */}
             <div className="flex flex-col gap-3">
               {[
                 { name: 'HP', val: pokemon.stats[0].base_stat, max: 255 },
@@ -114,7 +116,7 @@ const PokemonCard = ({ pokemon, onRemove, index, onExpand }) => {
               ))}
             </div>
 
-            {/* Offensive & Speed Block */}
+            {/* --- Offensive and speed stats */}
             <div className="flex flex-col gap-3">
               {[
                 { name: 'SPE', val: pokemon.stats[5].base_stat, max: 200 },
@@ -132,10 +134,10 @@ const PokemonCard = ({ pokemon, onRemove, index, onExpand }) => {
             </div>
           </div>
 
-          {/* Separator */}
+          {/* --- Row separator */}
           <div className="h-px bg-white/10 -mx-10"></div>
 
-          {/* Final Row */}
+          {/* --- Total stat value */}
           <div className="flex flex-col gap-1.5 relative z-10">
             <div className="flex items-center gap-4">
               <span className="text-[11px] font-black uppercase tracking-[0.4em] text-white/85 shrink-0">TOTAL</span>
